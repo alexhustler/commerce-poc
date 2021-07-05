@@ -4,7 +4,7 @@ export default async function handler(req: any, res: any) {
     const productResponse = await commerce.getProduct({
       variables: { slug: req.query.slug },
       config: {},
-      preview: {},
+      preview: false,
     })
     const { price } = productResponse.product;
     res.json({ price })
