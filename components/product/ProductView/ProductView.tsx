@@ -17,12 +17,18 @@ interface ProductViewProps {
   relatedProducts: Product[]
 }
 
-function fetchPrice() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve("$2.00");
-    }, 1000);
-  });
+async function fetchPrice(slug: string | undefined): Promise<{ value: number; currencyCode: string; }> {
+  const url = "/api/prices?" + new URLSearchParams({
+    slug: slug as string
+  })
+  const res = await fetch(url!)
+  const { price } = await res.json()
+  // return new Promise((resolve, reject) => {
+  //   setTimeout(() => {
+  //     resolve("$2.00");
+  //   }, 1000);
+  // });
+  return price
 }
 
 const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
@@ -32,12 +38,12 @@ const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
   //   currencyCode: product.price.currencyCode!,
   // })
 
-  const [price, setPrice] = useState('')
+  const [price, setPrice] = useState<number | string>('')
 
   useEffect(() => {
-    fetchPrice()
+    fetchPrice(product.slug)
       .then(_price => {
-        setPrice(_price as string)
+        setPrice(_price.value)
       })
   }, [product])
 
