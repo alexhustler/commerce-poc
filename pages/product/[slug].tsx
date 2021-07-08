@@ -44,13 +44,25 @@ export async function getStaticProps({
       relatedProducts,
       categories,
     },
-    revalidate: 1200,
+    revalidate: 200,
   }
 }
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { products } = await commerce.getAllProductPaths()
 
+  console.log(`Number of products ${products.length}`)
+  const paths = locales
+      ? locales.reduce<string[]>((arr, locale) => {
+          // Add a product path for every locale
+          products.forEach((product: any) => {
+            arr.push(`/${locale}/product${product.path}`)
+          })
+          return arr
+        }, [])
+      : products.map((product: any) => `/product${product.path}`)
+
+      console.log(`Number of paths ${paths.length}`)
   return {
     paths: locales
       ? locales.reduce<string[]>((arr, locale) => {
