@@ -23,11 +23,6 @@ async function fetchPrice(slug: string | undefined): Promise<{ value: number; cu
   })
   const res = await fetch(url!)
   const { price } = await res.json()
-  // return new Promise((resolve, reject) => {
-  //   setTimeout(() => {
-  //     resolve("$2.00");
-  //   }, 1000);
-  // });
   return price
 }
 
@@ -44,6 +39,11 @@ const ProductView: FC<ProductViewProps> = ({ product, relatedProducts }) => {
     fetchPrice(product.slug)
       .then(_price => {
         setPrice(_price.value)
+      })
+    // test performance of serverless functions
+    fetch(`/api/performance`)
+      .then(() => {
+        console.log('Finished performance check!')
       })
   }, [product])
 
