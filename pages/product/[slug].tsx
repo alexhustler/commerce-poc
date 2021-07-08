@@ -49,7 +49,7 @@ export async function getStaticProps({
 }
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
-  const { products } = await commerce.getAllProductPaths()
+  const { products } = await commerce.getAllProductPaths({ first: 10000 })
 
   console.log(`Number of products ${products.length}`)
   const paths = locales
