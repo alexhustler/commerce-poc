@@ -1,3 +1,4 @@
 export default async function handler(req: any, res: any) {
-  res.status(204).send()
+  const number = Math.random();
+  res.json({ number })
 }
