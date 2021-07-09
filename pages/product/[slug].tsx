@@ -51,8 +51,8 @@ async function fetchAllProducts() {
   isFetching = true
   const pages = [...Array(61).keys()]
   for (const page of pages) {
-    const { products: productsPaginated } = await commerce.getAllProducts({ variables: { first: 100, page } })
-    for (const product of productsPaginated) {
+    const allProducts = await commerce.getAllProducts({ variables: { first: 100, page } })
+    for (const product of allProducts) {
       console.log(product)
       products[product.slug] = product
     }
