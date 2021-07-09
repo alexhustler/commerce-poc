@@ -29,7 +29,7 @@ async function fetchSiteInfo(config: any, preview: any) {
 }
 
 let allProductsResponse: any = null
-async function fetchAllProducts(config: any, preview: any) {
+async function fetchRelatedProducts(config: any, preview: any) {
   if (allProductsResponse !== null) {
     return allProductsResponse
   }
@@ -40,6 +40,36 @@ async function fetchAllProducts(config: any, preview: any) {
   })
   allProductsResponse = _allProductsResponse
   return allProductsResponse
+}
+
+let products: any = {}
+let isFetching = false
+async function fetchAllProducts() {
+  if (isFetching) {
+    return null
+  }
+  isFetching = true
+  const pages = [...Array(61).keys()]
+  for (const page of pages) {
+    const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
+    for (const product of productsPaginated) {
+      console.log(product)
+      products[product.slug] = product
+    }
+  }
+  isFetching = false
+}
+
+async function fetchProduct(slug: string, config: any, preview: any) {
+  if (Object.keys(products).length === 0) {
+    fetchAllProducts()
+    const product = await commerce.getProduct({
+      variables: { slug },
+      config,
+      preview,
+    })
+    return product
+  }
 }
 
 let numberOfBuilds = 0;
@@ -53,17 +83,12 @@ export async function getStaticProps({
   console.time('buildTime')
   const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
-  const productPromise = commerce.getProduct({
-    variables: { slug: params!.slug },
-    config,
-    preview,
-  })
 
   const [pagesResponse, categoriesResponse, productResponse, allProductsResponse] = await Promise.all([
     fetchAllPages(config, preview),
     fetchSiteInfo(config, preview),
-    productPromise,
-    fetchAllProducts(config, preview)
+    fetchProduct(params!.slug, config, preview),
+    fetchRelatedProducts(config, preview)
   ])
   const { pages } = pagesResponse
   const { categories } = categoriesResponse
