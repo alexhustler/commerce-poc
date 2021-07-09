@@ -61,7 +61,7 @@ async function fetchAllProducts() {
 }
 
 async function fetchProduct(slug: string, config: any, preview: any) {
-  if (Object.keys(products).length === 0) {
+  if (Object.keys(products).length === 0 || isFetching) {
     fetchAllProducts()
     const product = await commerce.getProduct({
       variables: { slug },
