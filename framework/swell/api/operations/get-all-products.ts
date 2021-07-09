@@ -4,7 +4,7 @@ import { Product } from '@commerce/types/product'
 import { Provider, SwellConfig } from '../'
 import { OperationContext } from '@commerce/api/operations'
 
-export type ProductVariables = { first?: number }
+export type ProductVariables = { first?: number, page?: number }
 
 export default function getAllProductsOperation({
   commerce,
@@ -17,7 +17,7 @@ export default function getAllProductsOperation({
 
   async function getAllProducts({
     config: cfg,
-    variables = { first: 250 },
+    variables = { first: 250, page: 0 },
   }: {
     query?: string
     variables?: ProductVariables

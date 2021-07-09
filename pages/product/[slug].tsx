@@ -49,7 +49,12 @@ export async function getStaticProps({
 }
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
-  const { products } = await commerce.getAllProductPaths({ variables: { first: 100 } })
+  const products: any[] = [];
+  const pages = [0, 1, 2, 3]
+  for (const page of pages) {
+    const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100 } })
+    products.push(...productsPaginated);
+  }
 
   console.log(`Number of products ${products.length}`)
   const paths = locales
