@@ -8,6 +8,8 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
+const NUM_PAGES = 61;
+
 let pagesResponse: any = null
 async function fetchAllPages(config: any, preview: any) {
   if (pagesResponse !== null) {
@@ -45,11 +47,11 @@ async function fetchRelatedProducts(config: any, preview: any) {
 let products: any = {}
 let isFetching = false
 async function fetchAllProducts() {
-  if (isFetching) {
+  if (isFetching || Object.keys(products).length > 0) {
     return null
   }
   isFetching = true
-  const pages = [...Array(61).keys()]
+  const pages = [...Array(NUM_PAGES).keys()]
   for (const page of pages) {
     const { products: allProducts } = await commerce.getAllProducts({ variables: { first: 100, page } })
     for (const product of allProducts) {
@@ -61,8 +63,11 @@ async function fetchAllProducts() {
 }
 
 async function fetchProduct(slug: string, config: any, preview: any) {
-  if (Object.keys(products).length === 0 || isFetching) {
+  if (!isFetching) {
     fetchAllProducts()
+  }
+
+  if (isFetching) {
     const product = await commerce.getProduct({
       variables: { slug },
       config,
@@ -117,7 +122,7 @@ export async function getStaticProps({
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const products: any[] = [];
-  const pages = [...Array(61).keys()]
+  const pages = [...Array(NUM_PAGES).keys()]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
     console.log(`first product id: ${JSON.stringify(productsPaginated[0])}`)
