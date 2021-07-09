@@ -15,8 +15,8 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
+  console.time('buildTime')
   const config = { locale, locales }
-  console.log(`config: ${JSON.stringify(config)}`)
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
   const productPromise = commerce.getProduct({
@@ -40,6 +40,7 @@ export async function getStaticProps({
   }
 
   console.log(`building: ${product.path}`)
+  console.timeEnd('buildTime')
   return {
     props: {
       pages,
