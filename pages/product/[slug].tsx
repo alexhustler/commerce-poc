@@ -53,6 +53,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const pages = [0, 1, 2, 3]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
+    console.log(`last product ${productsPaginated}`)
     products.push(...productsPaginated);
   }
 
