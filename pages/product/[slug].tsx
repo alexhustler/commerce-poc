@@ -8,7 +8,7 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
-const NUM_PAGES = 61;
+const NUM_PAGES = 62;
 
 let pagesResponse: any = null
 async function fetchAllPages(config: any, preview: any) {
