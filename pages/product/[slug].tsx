@@ -30,10 +30,16 @@ export async function getStaticProps({
     config,
     preview,
   })
-  const { pages } = await pagesPromise
-  const { categories } = await siteInfoPromise
-  const { product } = await productPromise
-  const { products: relatedProducts } = await allProductsPromise
+  const [pagesResponse, categoriesResponse, productResponse, allProductsResponse] = await Promise.all([
+    pagesPromise,
+    siteInfoPromise,
+    productPromise,
+    allProductsPromise
+  ])
+  const { pages } = pagesResponse
+  const { categories } = categoriesResponse
+  const { product } = productResponse
+  const { products: relatedProducts } = allProductsResponse
 
   if (!product) {
     throw new Error(`Product with slug '${params!.slug}' not found`)
