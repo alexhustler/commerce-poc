@@ -28,6 +28,7 @@ export default function getAllProductsOperation({
     const { results } = await config.fetch('products', 'list', [
       {
         limit: variables.first,
+        page: variables.page
       },
     ])
     const products = results.map((product: SwellProduct) =>
