@@ -8,6 +8,26 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
+let pagesResponse: any = null
+async function fetchAllPages(config: any, preview: any) {
+  if (pagesResponse !== null) {
+    return pagesResponse
+  }
+  const _pagesResponse = await commerce.getAllPages({ config, preview })
+  pagesResponse = _pagesResponse
+  return pagesResponse
+}
+
+let siteInfoResponse: any = null
+async function fetchSiteInfo(config: any, preview: any) {
+  if (siteInfoResponse !== null) {
+    return siteInfoResponse
+  }
+  const _siteInfoResponse = await commerce.getSiteInfo({ config, preview })
+  siteInfoResponse = _siteInfoResponse
+  return siteInfoResponse
+}
+
 let numberOfBuilds = 0;
 let totalBuildTime = 0;
 export async function getStaticProps({
@@ -19,8 +39,8 @@ export async function getStaticProps({
   console.time('buildTime')
   const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
-  const pagesPromise = commerce.getAllPages({ config, preview })
-  const siteInfoPromise = commerce.getSiteInfo({ config, preview })
+  const pagesPromise = fetchAllPages(config, preview)
+  const siteInfoPromise = fetchSiteInfo(config, preview)
   const productPromise = commerce.getProduct({
     variables: { slug: params!.slug },
     config,
