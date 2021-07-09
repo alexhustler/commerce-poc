@@ -8,12 +8,16 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
+let numPages = 0;
 export async function getStaticProps({
   params,
   locale,
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
+  console.log(`NumPages Built ${numPages}`)
+  console.log(`preview: ${preview}`)
+  numPages++
   const config = { locale, locales }
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
@@ -53,7 +57,7 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const pages = [0, 1, 2, 3]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
-    console.log(`last product ${productsPaginated}`)
+    console.log(`last product ${JSON.stringify(productsPaginated[productsPaginated.length - 1])}`)
     products.push(...productsPaginated);
   }
 
