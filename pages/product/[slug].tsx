@@ -53,10 +53,6 @@ async function fetchAllProducts() {
   for (const page of pages) {
     const { products: allProducts } = await commerce.getAllProducts({ variables: { first: 100, page } })
     for (const product of allProducts) {
-      console.log(product)
-      if (typeof product === 'undefined') {
-        continue
-      }
       const index: string = product!.slug || 'a'
       products[index] = product
     }
@@ -74,6 +70,7 @@ async function fetchProduct(slug: string, config: any, preview: any) {
     })
     return product
   }
+  return products[slug]
 }
 
 let numberOfBuilds = 0;
@@ -88,7 +85,7 @@ export async function getStaticProps({
   const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
 
-  const [pagesResponse, categoriesResponse, productResponse, allProductsResponse] = await Promise.all([
+  const [pagesResponse, categoriesResponse, product, allProductsResponse] = await Promise.all([
     fetchAllPages(config, preview),
     fetchSiteInfo(config, preview),
     fetchProduct(params!.slug, config, preview),
@@ -96,7 +93,6 @@ export async function getStaticProps({
   ])
   const { pages } = pagesResponse
   const { categories } = categoriesResponse
-  const { product } = productResponse
   const { products: relatedProducts } = allProductsResponse
 
   if (!product) {
