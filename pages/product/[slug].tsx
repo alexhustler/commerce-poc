@@ -8,7 +8,8 @@ import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
 
-let numPages = 0;
+let numberOfBuilds = 0;
+let totalBuildTime = 0;
 export async function getStaticProps({
   params,
   locale,
@@ -16,6 +17,7 @@ export async function getStaticProps({
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
   console.time('buildTime')
+  const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
@@ -47,6 +49,9 @@ export async function getStaticProps({
 
   console.log(`building: ${product.path}`)
   console.timeEnd('buildTime')
+  totalBuildTime += new Date().getTime() - startOfBuildTime
+  numberOfBuilds++;
+  console.log('Average build time: ', totalBuildTime / numberOfBuilds)
   return {
     props: {
       pages,
