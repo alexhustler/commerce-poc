@@ -38,6 +38,7 @@ export async function getStaticProps({
     throw new Error(`Product with slug '${params!.slug}' not found`)
   }
 
+  console.log(`building: ${product.path}`)
   return {
     props: {
       pages,
