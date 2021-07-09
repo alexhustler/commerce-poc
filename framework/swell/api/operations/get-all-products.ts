@@ -25,6 +25,7 @@ export default function getAllProductsOperation({
     preview?: boolean
   } = {}): Promise<{ products: Product[] | any[] }> {
     const config = commerce.getConfig(cfg)
+    console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: ', variables.page)
     const { results } = await config.fetch('products', 'list', [
       {
         limit: variables.first,
