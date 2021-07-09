@@ -57,7 +57,8 @@ async function fetchAllProducts() {
       if (typeof product === 'undefined') {
         continue
       }
-      products[product!.slug] = product
+      const index: string = product!.slug || 'a'
+      products[index] = product
     }
   }
   isFetching = false
