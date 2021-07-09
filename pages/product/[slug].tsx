@@ -54,7 +54,7 @@ async function fetchAllProducts() {
     const { products: allProducts } = await commerce.getAllProducts({ variables: { first: 100, page } })
     for (const product of allProducts) {
       console.log(product)
-      if (!product) {
+      if (typeof product === 'undefined') {
         continue
       }
       products[product!.slug] = product
