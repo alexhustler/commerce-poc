@@ -28,6 +28,20 @@ async function fetchSiteInfo(config: any, preview: any) {
   return siteInfoResponse
 }
 
+let allProductsResponse: any = null
+async function fetchAllProducts(config: any, preview: any) {
+  if (allProductsResponse !== null) {
+    return allProductsResponse
+  }
+  const _allProductsResponse = await commerce.getAllProducts({
+    variables: { first: 4 },
+    config,
+    preview,
+  })
+  allProductsResponse = _allProductsResponse
+  return allProductsResponse
+}
+
 let numberOfBuilds = 0;
 let totalBuildTime = 0;
 export async function getStaticProps({
@@ -39,24 +53,17 @@ export async function getStaticProps({
   console.time('buildTime')
   const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
-  const pagesPromise = fetchAllPages(config, preview)
-  const siteInfoPromise = fetchSiteInfo(config, preview)
   const productPromise = commerce.getProduct({
     variables: { slug: params!.slug },
     config,
     preview,
   })
 
-  const allProductsPromise = commerce.getAllProducts({
-    variables: { first: 4 },
-    config,
-    preview,
-  })
   const [pagesResponse, categoriesResponse, productResponse, allProductsResponse] = await Promise.all([
-    pagesPromise,
-    siteInfoPromise,
+    fetchAllPages(config, preview),
+    fetchSiteInfo(config, preview),
     productPromise,
-    allProductsPromise
+    fetchAllProducts(config, preview)
   ])
   const { pages } = pagesResponse
   const { categories } = categoriesResponse
