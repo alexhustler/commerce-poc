@@ -107,7 +107,7 @@ export async function getStaticProps({
   console.timeEnd(`page ${params!.slug} build time`)
   totalBuildTime += new Date().getTime() - startOfBuildTime
   numberOfBuilds++;
-  console.log('Average static page build time: ', totalBuildTime / numberOfBuilds)
+  // console.log('Average static page build time: ', totalBuildTime / numberOfBuilds)
   return {
     props: {
       pages,
@@ -115,7 +115,7 @@ export async function getStaticProps({
       relatedProducts,
       categories,
     },
-    revalidate: 200,
+    // revalidate: 200,
   }
 }
 
@@ -124,7 +124,6 @@ export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const pages = [...Array(NUM_PAGES).keys()]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
-    console.log(`first product id: ${JSON.stringify(productsPaginated[0])}`)
     products.push(...productsPaginated);
   }
 
