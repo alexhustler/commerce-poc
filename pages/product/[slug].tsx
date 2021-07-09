@@ -86,7 +86,7 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
-  console.time('buildTime')
+  console.time(`page ${params!.slug} build time`)
   const startOfBuildTime = new Date().getTime();
   const config = { locale, locales }
 
@@ -104,11 +104,10 @@ export async function getStaticProps({
     throw new Error(`Product with slug '${params!.slug}' not found`)
   }
 
-  console.log(`building: ${product.path}`)
-  console.timeEnd('buildTime')
+  console.timeEnd(`page ${params!.slug} build time`)
   totalBuildTime += new Date().getTime() - startOfBuildTime
   numberOfBuilds++;
-  console.log('Average build time: ', totalBuildTime / numberOfBuilds)
+  console.log('Average static page build time: ', totalBuildTime / numberOfBuilds)
   return {
     props: {
       pages,
