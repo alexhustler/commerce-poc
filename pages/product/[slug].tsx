@@ -68,7 +68,7 @@ async function fetchProduct(slug: string, config: any, preview: any) {
   }
 
   if (isFetching) {
-    const product = await commerce.getProduct({
+    const { product } = await commerce.getProduct({
       variables: { slug },
       config,
       preview,
