@@ -15,9 +15,6 @@ export async function getStaticProps({
   locales,
   preview,
 }: GetStaticPropsContext<{ slug: string }>) {
-  console.log(`NumPages Built ${numPages}`)
-  console.log(`preview: ${preview}`)
-  numPages++
   const config = { locale, locales }
   const pagesPromise = commerce.getAllPages({ config, preview })
   const siteInfoPromise = commerce.getSiteInfo({ config, preview })
@@ -54,7 +51,7 @@ export async function getStaticProps({
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const products: any[] = [];
-  const pages = [...Array(60).keys()]
+  const pages = [...Array(61).keys()]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
     console.log(`first product id: ${JSON.stringify(productsPaginated[0])}`)
