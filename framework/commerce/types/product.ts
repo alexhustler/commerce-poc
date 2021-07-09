@@ -81,7 +81,7 @@ export type GetAllProductPathsOperation<
   T extends ProductTypes = ProductTypes
 > = {
   data: { products: Pick<T['product'], 'path'>[] }
-  variables: { first?: number }
+  variables: { first?: number, page?: number }
 }
 
 export type GetAllProductsOperation<T extends ProductTypes = ProductTypes> = {
@@ -90,6 +90,7 @@ export type GetAllProductsOperation<T extends ProductTypes = ProductTypes> = {
     relevance?: 'featured' | 'best_selling' | 'newest'
     ids?: string[]
     first?: number
+    page?: number
   }
 }
 
