@@ -34,6 +34,7 @@ export default function getAllProductPathsOperation({
     const { results } = await config.fetch('products', 'list', [
       {
         limit: variables?.first,
+        page: variables?.page
       },
     ])
 
