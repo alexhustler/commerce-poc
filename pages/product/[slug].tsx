@@ -54,7 +54,7 @@ export async function getStaticProps({
 
 export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const products: any[] = [];
-  const pages = [0, 1, 2, 3]
+  const pages = [...Array(60).keys()]
   for (const page of pages) {
     const { products: productsPaginated } = await commerce.getAllProductPaths({ variables: { first: 100, page } })
     console.log(`first product id: ${JSON.stringify(productsPaginated[0])}`)
